@@ -9,7 +9,6 @@
 
 ## ---- env
  We have five env vars in the app create them before running the app!!!
- `For TESTING purposes my local env variables are available in the end of the README file...`
 ## ---- 
 
 ## ---- Folder structure 
