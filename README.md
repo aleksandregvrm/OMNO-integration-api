@@ -4,7 +4,7 @@
 ## ---- Running the application
  1) git clone, -> npm install, -> create .env(with env variables), -> npm run dev
 
- 2) Go to the https://hub.docker.com/r/aleksandregvrm/omno-node-app and set up docker container that runs on PORT:9000, when you pull the application from the docker hub you need to add one env var for google-login to work. set DOCKER_CALLBACK=true, and set host port to be 9000.
+ 2) Go to the https://hub.docker.com/r/aleksandregvrm/omno-node-app and set up docker container that runs on PORT:9000, when you pull the application from the docker hub you need to add one env var for google-login to work. set DOCKER_CALLBACK=true, and set host port to be 9000 (docker run -e DOCKER_CALLBACK=true -p 9000:5002 aleksandregvrm/omno-node-app).
 ## ---- 
 
 ## ---- env
@@ -57,5 +57,5 @@
 ## ---- Docker
  Docker repo can be viewed on dockerhub -- https://hub.docker.com/r/aleksandregvrm/omno-node-app. Keep in mind that containerized version of server runs on PORT:9000.
 
- when you pull the application from the docker hub you need to add one env var for google-login to work. set DOCKER_CALLBACK=true, and set host port to be 9000.
+ when you pull the application from the docker hub you need to add one env var for google-login to work. set DOCKER_CALLBACK=true, and set host port to be 9000 (docker run -e DOCKER_CALLBACK=true -p 9000:5002 aleksandregvrm/omno-node-app).
 ## ---- 
