@@ -8,7 +8,7 @@
 ## ---- 
 
 ## ---- env
- We have five env vars in the app create them before running the app!!!
+ We have a few env vars in the app create them before running the app!!!
 ## ---- 
 
 ## ---- Folder structure 
