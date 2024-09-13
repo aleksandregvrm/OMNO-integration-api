@@ -33,7 +33,6 @@ const swaggerOptions = {
       "5) `/callback` endpoint is used for success callbacks from the OMNO API, while `/callbackFail` is used for failure callbacks.\n\n" , 
       version: "1.0.0",
     },
-    host: ["localhost:5002","localhost:9000"],
     schemes: ["http", "https"],
     consumes: ["application/json"],
     produces: ["application/json"],
@@ -41,4 +40,19 @@ const swaggerOptions = {
   },
 };
 // For Creating swagger UI End
-module.exports = {retryWithExponentialBackoff,swaggerOptions}
+// Dynamic swagger host
+const dynamicSwaggerHost = (fastify) => {
+  return fastify.addHook("onRequest", (req, reply, done) => {
+    const dynamicSwaggerOptions = {
+      ...swaggerOptions,
+      swagger: {
+        ...swaggerOptions.swagger,
+        host: req.headers.host,
+      },
+    };
+    fastify.swagger(dynamicSwaggerOptions);
+    done();
+  });
+}
+// Dynamic swagger host End
+module.exports = {retryWithExponentialBackoff,swaggerOptions, dynamicSwaggerHost}

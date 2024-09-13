@@ -4,7 +4,7 @@
 ## ---- Running the application
  1) git clone, -> npm install, -> create .env(with env variables), -> npm run dev
 
- 2) Go to the https://hub.docker.com/r/aleksandregvrm/omno-node-app and set up docker container that runs on PORT:9000, when you pull the application from the docker hub you need to add one env var for google-login to work. set DOCKER_CALLBACK=true, and set host port to be 9000 (docker run -e DOCKER_CALLBACK=true -p 9000:5002 aleksandregvrm/omno-node-app).
+ 2) Go to the https://hub.docker.com/repositories/aleksandregvrm and set up docker container that runs on PORT:9000, when you pull the application from the docker hub you need to add one env var for google-login to work. set DOCKER_CALLBACK=true, and set host port to be 9000 (docker run -e DOCKER_CALLBACK=true -p 9000:5002 aleksandregvrm/omno-node-app).
 ## ---- 
 
 ## ---- env
@@ -20,7 +20,7 @@
  In routes we also have two routes one of the authorizationRoutes that we keep separately from the transactions routes 
 
 ### models
- In models folder we have schema.js file which handles all the schemas for our request-response cycle
+ In models folder we have schema files which handles all the schemas for our request-response cycle
 
 ### middlewares
  In middlewares we have a authorization middleware which makes sure that user is logged in through google
@@ -30,7 +30,7 @@
 ## ----
 
 ## ---- Schema
- In the Schema for the transactions we have all the necessary parameters set, in case the client sends incorrect req.body the relevant errors will be triggered, You can view the create transaction schema in "/models/schemas.js"
+ In the Schema for the transactions we have all the necessary parameters set, in case the client sends incorrect req.body the relevant errors will be triggered, You can view the create transaction schema in "/models"
 ## ---- 
 
 
@@ -55,7 +55,7 @@
 ## ----
 
 ## ---- Docker
- Docker repo can be viewed on dockerhub -- https://hub.docker.com/r/aleksandregvrm/omno-node-app. Keep in mind that containerized version of server runs on PORT:9000.
+ Docker repo can be viewed on dockerhub -- https://hub.docker.com/repositories/aleksandregvrm. Keep in mind that containerized version of server runs on PORT:9000.
 
  when you pull the application from the docker hub you need to add one env var for google-login to work. set DOCKER_CALLBACK=true, and set host port to be 9000 (docker run -e DOCKER_CALLBACK=true -p 9000:5002 aleksandregvrm/omno-node-app).
 ## ---- 

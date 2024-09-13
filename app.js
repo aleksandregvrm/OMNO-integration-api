@@ -11,7 +11,7 @@ fastify.register(require("@fastify/cors"), {
 // Cors End
 
 // Swagger
-const { swaggerOptions } = require("./utils/utils");
+const { swaggerOptions,dynamicSwaggerHost } = require("./utils/utils");
 
 const swaggerUiOptions = {
   routePrefix: "/docs",
@@ -20,6 +20,8 @@ const swaggerUiOptions = {
 
 fastify.register(fastifySwagger, swaggerOptions);
 fastify.register(fastifySwaggerUi, swaggerUiOptions);
+// This hook dynamically sets swagger to work on every port...
+dynamicSwaggerHost(fastify);
 // Swagger End
 
 // Home Page
@@ -51,6 +53,7 @@ const authenticationRoutes = require("./routes/authenticationRoutes");
 fastify.register(authenticationRoutes);
 fastify.register(authorizationRoutes);
 fastify.register(transactionRoutes);
+
 // Routes End
 
 const start = async () => {
