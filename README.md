@@ -20,7 +20,7 @@
  In routes we also have two routes one of the authorizationRoutes that we keep separately from the transactions routes 
 
 ### models
- In models folder we have schema.js file which handles all the schemas for our request-response cycle
+ In models folder we have schema files which handles all the schemas for our request-response cycle
 
 ### middlewares
  In middlewares we have a authorization middleware which makes sure that user is logged in through google
@@ -30,7 +30,7 @@
 ## ----
 
 ## ---- Schema
- In the Schema for the transactions we have all the necessary parameters set, in case the client sends incorrect req.body the relevant errors will be triggered, You can view the create transaction schema in "/models/schemas.js"
+ In the Schema for the transactions we have all the necessary parameters set, in case the client sends incorrect req.body the relevant errors will be triggered, You can view the create transaction schema in "/models"
 ## ---- 
 
 

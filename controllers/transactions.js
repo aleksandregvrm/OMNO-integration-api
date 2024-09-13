@@ -1,40 +1,22 @@
 const { retryWithExponentialBackoff } = require("../utils/utils");
+const fetchCall = require("../utils/apiCalls");
 
 // Creating Transactions
 const createTransaction = async (req, reply) => {
   const transactionInformation = req.body;
   const token = req.headers.authorization;
-  const options = {
-    method: "POST",
-    headers: {
-      accept: "application/json",
-      "content-type": "application/json",
-      authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(transactionInformation),
-  };
+  // const token = '123'
 
-  // Function to make the API request
+  // we need to pass an uninvoked function this way for retries to work
   const createTransactionRequest = async () => {
-    const response = await fetch(
-      `${process.env.CREATE_TRANSACTION_URL}`,
-      options
-    );
-    if(response.status === 401){
-      return reply.status(response.status).send({
-        error: response.status,
-        message: response.statusText,
-      });
-    }
-    // In case we have unauthorized error it will be thrown immediately
-    if (!response.ok) {
-      const error = new Error(
-        response.statusText
+      return await fetchCall(
+        process.env.CREATE_TRANSACTION_URL,
+        "POST",
+        "application/json",
+        JSON.stringify(transactionInformation),
+        reply, token
       );
-      error.status = response.status;
-      throw error;
-    }
-    return response.json();
+      // Here we send out the error instance
   };
   try {
     // This function retries the request the amount of times we write in argument
@@ -45,7 +27,7 @@ const createTransaction = async (req, reply) => {
     );
     reply.send(data);
   } catch (error) {
-    // We handle the error instance in here
+    // We catch and handle the error instance in here
     const statusCode = error.status || 500;
     const message =
       statusCode === 500 ? "Internal Server Error" : error.message;
@@ -61,26 +43,14 @@ const createTransaction = async (req, reply) => {
 const handleWebhook = async (req, reply) => {
   const { paymentId } = req.body;
   const token = req.headers.authorization;
-  const options = {
-    method: "GET",
-    headers: {
-      accept: "application/json",
-      "content-type": "application/json",
-      authorization: `Bearer ${token}`,
-    },
-  };
   try {
-    const response = await fetch(
+    const data = await fetchCall(
       `${process.env.PAYMENT_INFO_URL}/${paymentId}`,
-      options
+      "GET",
+      "application/json",
+      '',reply,token
     );
-    if (response.status !== 200) {
-      reply.status(response.status).send({
-        error: response.status,
-        message: response.statusText,
-      });
-    }
-    const data = await response.json();
+    
     const { status: dataStatus } = data;
     if (dataStatus !== "Created") {
       const { "3dsRedirectUrl": redirectUrl } = data;
@@ -95,5 +65,4 @@ const handleWebhook = async (req, reply) => {
   }
 };
 // Handling Webhooks End
-
 module.exports = { createTransaction, handleWebhook };

@@ -1,4 +1,5 @@
 const { createJWT } = require("../utils/jwt");
+const fetchCall = require("../utils/apiCalls");
 const GOOGLE_OAUTH_SCOPES = [
     "https://www.googleapis.com/auth/userinfo.email",
     "https://www.googleapis.com/auth/userinfo.profile",
@@ -27,43 +28,37 @@ const callbackGoogle = async (req,reply) => {
     };
 
     try {
-      const response = await fetch(process.env.GOOGLE_ACCESS_TOKEN_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+     const googleData = await fetchCall(
+       process.env.GOOGLE_ACCESS_TOKEN_URL,
+       "POST",
+       "application/json",
+       JSON.stringify(data), 
+       reply,
+       ""
+     );
 
-      if (!response.ok) {
-        throw new Error(`Error fetching access token: ${response.statusText}`);
-      }
-
-      const access_token_data = await response.json();
-      const { id_token } = access_token_data;
-
-      const token_info_response = await fetch(
-        `${process.env.GOOGLE_TOKEN_INFO_URL}?id_token=${id_token}`
-      );
-
-      if (!token_info_response.ok) {
-        throw new Error(
-          `Error fetching token info: ${token_info_response.statusText}`
-        );
-      }
-
-      const token_info_data = await token_info_response.json();
-      const { email, name } = token_info_data;
-
-      const jwtToken = createJWT({ payload: { name, email } });
-      reply
-        .status(201)
-        .send({ message: "User logging in with google", jwt: jwtToken });
+     const { id_token } = googleData;
+     const token_info_response = await fetchCall(
+       `${process.env.GOOGLE_TOKEN_INFO_URL}?id_token=${id_token}`,
+       "GET",
+       "application/json",
+       "",
+       reply,
+       ""
+     );
+     const { email, name } = token_info_response;
+     const jwtToken = createJWT({ payload: { name, email } });
+     reply
+       .status(201)
+       .send({ message: "User logged in with Google", jwt: jwtToken });
     } catch (error) {
-      console.error("Error fetching access token:", error);
-      reply
-        .status(500)
-        .send({ error: "An error occurred during authentication." });
+      const statusCode = error.status || 500;
+      const message =
+        statusCode === 500 ? "Internal Server Error" : error.message;
+      reply.status(statusCode).send({
+        error: statusCode === 500 ? 500 : error.status,
+        message,
+      });
     }
 }
 module.exports = {loginGoogle,callbackGoogle}

@@ -1,31 +1,25 @@
+const fetchCall = require("../utils/apiCalls");
 const authorizeUser = async (req, reply) => {
   try {
     const formData = new URLSearchParams();
     formData.append("grant_type", "client_credentials");
     formData.append("client_id", process.env.CLIENT_ID);
     formData.append("client_secret", process.env.CLIENT_SECRET);
-
-    const response = await fetch(`${process.env.AUTH_URL}`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: formData,
-    });
-    if (response.status !== 200) {
-      return reply.status(response.status).send({
-        error: response.status,
-        message: response.statusText,
-      });
-    }
-    const data = await response.json()
+    // Fetch call function is available in apiCalls file
+    const data = await fetchCall(
+      process.env.AUTH_URL,
+      "POST",
+      "application/x-www-form-urlencoded",
+      formData, reply
+    );
     reply.send(data);
   } catch (error) {
-    console.error(error.response?.data || error.message);
-    reply.status(500).send({
-      error: "Internal Server Error",
-      message: error.response?.data.error || error.message,
+    const statusCode = error.status || 500;
+    const message =
+      statusCode === 500 ? "Internal Server Error" : error.message;
+    reply.status(statusCode).send({
+      error: statusCode === 500 ? 500 : error.status,
+      message,
     });
   }
 };

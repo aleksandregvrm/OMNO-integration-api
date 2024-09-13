@@ -1,4 +1,3 @@
-// Create transaction Schema
 const createTransactionSchema = {
   body: {
     type: "object",
@@ -151,26 +150,4 @@ const createTransactionSchema = {
     },
   },
 };
-// Create transaction Schema End
-
-// Web hooks Schema
-const webHookSchema = {
-  body: {
-    type: "object",
-    required: ["paymentId"],
-    properties: {
-      paymentId: { type: "string" },
-    },
-  },
-  headers: {
-    type: "object",
-    properties: {
-      authorization: { type: "string" },
-      "x-local-authorization": { type: "string" },
-    },
-    required: ["authorization", "x-local-authorization"],
-  },
-};
-// Web hooks Schema End
-
-module.exports = { createTransactionSchema, webHookSchema };
+module.exports = createTransactionSchema

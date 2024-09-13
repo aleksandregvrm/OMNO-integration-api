@@ -1,4 +1,5 @@
-const {createTransactionSchema,webHookSchema} = require('../models/schemas');
+const webHookSchema = require("../models/webhookSchema");
+const createTransactionSchema = require("../models/transactionSchema")
 const {createTransaction,handleWebhook} = require("../controllers/transactions");
 const authorizationMiddleware = require("../middlewares/userAuthorization");
 
